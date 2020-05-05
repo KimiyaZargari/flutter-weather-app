@@ -13,6 +13,32 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Account"),
+        actions: <Widget>[
+          PopupMenuButton<MenuItem>(
+            color: Colors.pink[100],
+            itemBuilder: (BuildContext context) {
+              return items.map((MenuItem item) {
+                return PopupMenuItem<MenuItem>(
+                  value: item,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          item.title,
+                          style: TextStyle(
+                              color: Colors.pinkAccent,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Icon(
+                          item.icon,
+                          color: Colors.pinkAccent,
+                        )
+                      ]),
+                );
+              }).toList();
+            },
+          )
+        ],
         backgroundColor: Colors.pinkAccent,
       ),
       body: ListView.builder(
@@ -26,7 +52,6 @@ class Home extends StatelessWidget {
                 children: <Widget>[
                   Image.network(
                       'http://openweathermap.org/img/wn/${weatherData.list[index].weather[0].icon}@2x.png'),
-
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: Column(
@@ -41,7 +66,9 @@ class Home extends StatelessWidget {
                             color: Colors.pinkAccent,
                           ),
                         ),
-                        SizedBox(height:  10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           '${weatherData.list[index].weather[0].description}',
                           style: TextStyle(
@@ -52,14 +79,18 @@ class Home extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(width: 70,),
+                  SizedBox(
+                    width: 70,
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 5, 0),
-                    child: Text('${weatherData.list[index].dtTxt.hour}:${weatherData.list[index].dtTxt.minute}0',
+                    child: Text(
+                      '${weatherData.list[index].dtTxt.hour}:${weatherData.list[index].dtTxt.minute}0',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.pinkAccent,
-                      ),),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -68,3 +99,16 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+class MenuItem {
+  String title;
+  IconData icon;
+
+  MenuItem({this.title, this.icon});
+}
+
+List<MenuItem> items = <MenuItem>[
+  MenuItem(title: 'Add Location', icon: Icons.location_on),
+  MenuItem(title: 'Dark Theme', icon: Icons.brightness_3),
+  MenuItem(title: 'Logout', icon: Icons.exit_to_app)
+];
