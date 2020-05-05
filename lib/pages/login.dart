@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
 
 class Login extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   bool switchOn = false;
 
   @override
@@ -251,7 +252,8 @@ class Login extends StatelessWidget {
                             Navigator.pushNamed(context, '/loading',
                                 arguments: {
                                   'email': loginInfo.email,
-                                  'password': loginInfo.password
+                                  'password': loginInfo.password,
+                                  'isDark': appTheme.isDark
                                 });
                           } else {
                             loginInfo.autoValidate = true;
