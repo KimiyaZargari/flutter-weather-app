@@ -25,6 +25,9 @@ class _LoadingState extends State<Loading> {
             'units': 'metric',
             'appid': '121bfe664777c886e1481f7feb830455'
           });
+
+      Response response2 = await Dio().post('https://postman-echo.com/post', data: 'num num');
+      print('kimiya $response2');
       WeatherData weatherData = weatherListFromJson(response.toString());
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'email': widget.loginData['email'],
