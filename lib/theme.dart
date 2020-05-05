@@ -8,16 +8,16 @@ bool isDark = false;
   Color mainText = Colors.black;
   Color greyText = Colors.grey;
 
-  void darkTheme(){
+  void setDarkTheme(){
     backgroundColor = Colors.deepOrange[900];
-    mainColor = Colors.orange[200];
+    mainColor = Colors.orange[300];
     cardColor = Colors.orange[700];
     mainText = Colors.white;
     greyText = Colors.grey[300];
     isDark = true;
     notifyListeners();
   }
-  void lightTheme(){
+  void setLightTheme(){
     backgroundColor = Colors.white;
     mainText = Colors.black;
      mainColor = Colors.pinkAccent;

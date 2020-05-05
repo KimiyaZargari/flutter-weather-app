@@ -48,9 +48,9 @@ class Login extends StatelessWidget {
                           activeColor: Colors.deepOrange,
                           onChanged: (bool value) {
                             if (!appTheme.isDark)
-                              appTheme.darkTheme();
+                              appTheme.setDarkTheme();
                             else
-                              appTheme.lightTheme();
+                              appTheme.setLightTheme();
                           }),
                     ),
                     Image.asset(
