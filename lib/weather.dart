@@ -3,6 +3,8 @@
 //     final empty = emptyFromJson(jsonString);
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 WeatherData weatherListFromJson(String str) =>
     WeatherData.fromJson(json.decode(str));
 
@@ -65,8 +67,8 @@ class MainClass {
 
 class Weather {
   int id;
-  MainEnum main;
-  Description description;
+  String main;
+  String description;
   String icon;
 
   Weather({
@@ -76,48 +78,9 @@ class Weather {
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
-        main: mainEnumValues.map[json["main"]],
-        description: descriptionValues.map[json["description"]],
+        main: json["main"],
+        description: json["description"],
         icon: json["icon"],
       );
 }
 
-enum Description {
-  CLEAR_SKY,
-  FEW_CLOUDS,
-  BROKEN_CLOUDS,
-  OVERCAST_CLOUDS,
-  SCATTERED_CLOUDS,
-  LIGHT_RAIN
-}
-
-final descriptionValues = EnumValues({
-  "broken clouds": Description.BROKEN_CLOUDS,
-  "clear sky": Description.CLEAR_SKY,
-  "few clouds": Description.FEW_CLOUDS,
-  "light rain": Description.LIGHT_RAIN,
-  "overcast clouds": Description.OVERCAST_CLOUDS,
-  "scattered clouds": Description.SCATTERED_CLOUDS
-});
-
-enum MainEnum { CLEAR, CLOUDS, RAIN }
-
-final mainEnumValues = EnumValues({
-  "Clear": MainEnum.CLEAR,
-  "Clouds": MainEnum.CLOUDS,
-  "Rain": MainEnum.RAIN
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
-}
