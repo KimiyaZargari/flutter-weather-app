@@ -249,7 +249,7 @@ class Login extends StatelessWidget {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _formKey.currentState.save();
-                            Navigator.pushNamed(context, '/loading',
+                            Navigator.pushReplacementNamed(context, '/loading',
                                 arguments: {
                                   'email': loginInfo.email,
                                   'password': loginInfo.password,

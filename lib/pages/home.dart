@@ -10,11 +10,27 @@ class Home extends StatelessWidget {
     data = ModalRoute.of(context).settings.arguments;
     WeatherData weatherData = data['weather'];
 
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Account"),
         actions: <Widget>[
           PopupMenuButton<MenuItem>(
+            onSelected: (MenuItem menuItem) {
+              switch (menuItem.item) {
+                case Item.ADD_LOCATION:
+                  {}
+                  break;
+                case Item.DAK_THEME:
+                  {}
+                  break;
+                case Item.LOG_OUT:
+                  {
+                    Navigator.pushReplacementNamed(context, '/', arguments: {
+                    });
+                  }
+              }
+            },
             color: Colors.pink[100],
             itemBuilder: (BuildContext context) {
               return items.map((MenuItem item) {
@@ -100,15 +116,19 @@ class Home extends StatelessWidget {
   }
 }
 
+enum Item { LOG_OUT, DAK_THEME, ADD_LOCATION }
+
 class MenuItem {
   String title;
   IconData icon;
+  Item item;
 
-  MenuItem({this.title, this.icon});
+  MenuItem({this.title, this.icon, this.item});
 }
 
 List<MenuItem> items = <MenuItem>[
-  MenuItem(title: 'Add Location', icon: Icons.location_on),
-  MenuItem(title: 'Dark Theme', icon: Icons.brightness_3),
-  MenuItem(title: 'Logout', icon: Icons.exit_to_app)
+  MenuItem(
+      title: 'Add Location', icon: Icons.location_on, item: Item.ADD_LOCATION),
+  MenuItem(title: 'Dark Theme', icon: Icons.brightness_3, item: Item.DAK_THEME),
+  MenuItem(title: 'Logout', icon: Icons.exit_to_app, item: Item.LOG_OUT)
 ];
