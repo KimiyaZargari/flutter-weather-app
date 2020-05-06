@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loginapp/weather.dart';
+import 'package:provider/provider.dart';
+
+import '../theme.dart';
 
 class Home extends StatelessWidget {
   Map data = {};
@@ -9,109 +12,123 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
     WeatherData weatherData = data['weather'];
+    bool isDark = data['isDark'];
+    print('log home $isDark');
 
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Your Account"),
-        actions: <Widget>[
-          PopupMenuButton<MenuItem>(
-            onSelected: (MenuItem menuItem) {
-              switch (menuItem.item) {
-                case Item.ADD_LOCATION:
-                  {}
-                  break;
-                case Item.DAK_THEME:
-                  {}
-                  break;
-                case Item.LOG_OUT:
-                  {
-                    Navigator.pushReplacementNamed(context, '/', arguments: {
-                    });
+    return ChangeNotifierProvider<AppTheme>(
+      create: (context) => AppTheme(isDark),
+      child: Consumer<AppTheme>(
+        builder: (_, appTheme, __) => Scaffold(
+          backgroundColor: appTheme.backgroundColor,
+          appBar: AppBar(
+            title: Text("Your Account", style: TextStyle(color: appTheme.appBarTitle),),
+            actions: <Widget>[
+              PopupMenuButton<MenuItem>(
+                onSelected: (MenuItem menuItem) {
+                  switch (menuItem.item) {
+                    case Item.ADD_LOCATION:
+                      {}
+                      break;
+                    case Item.DAK_THEME:
+                      {
+                        print("setting dark theme from $isDark");
+                        isDark = !isDark;
+                        print("to $isDark");
+                        isDark
+                            ? appTheme.setDarkTheme()
+                            : appTheme.setLightTheme();
+                      }
+                      break;
+                    case Item.LOG_OUT:
+                      {
+                        Navigator.pushReplacementNamed(context, '/',
+                            arguments: {'isDark': isDark});
+                      }
                   }
-              }
-            },
-            color: Colors.pink[100],
-            itemBuilder: (BuildContext context) {
-              return items.map((MenuItem item) {
-                return PopupMenuItem<MenuItem>(
-                  value: item,
+                },
+                color: appTheme.cardColor,
+                itemBuilder: (BuildContext context) {
+                  return items.map((MenuItem item) {
+                    return PopupMenuItem<MenuItem>(
+                      value: item,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              item.title,
+                              style: TextStyle(
+                                  color: appTheme.mainColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(
+                              item.icon,
+                              color: appTheme.mainColor,
+                            )
+                          ]),
+                    );
+                  }).toList();
+                },
+              )
+            ],
+            backgroundColor: appTheme.appBarColor,
+          ),
+          body: ListView.builder(
+              itemCount: weatherData.list.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: appTheme.cardColor,
                   child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          item.title,
-                          style: TextStyle(
-                              color: Colors.pinkAccent,
-                              fontWeight: FontWeight.bold),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Image.network(
+                          'http://openweathermap.org/img/wn/${weatherData.list[index].weather[0].icon}@2x.png'),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              '${weatherData.list[index].main.temp} °C',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: appTheme.mainColor,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              '${weatherData.list[index].weather[0].description}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appTheme.mainColor,
+                              ),
+                            )
+                          ],
                         ),
-                        Icon(
-                          item.icon,
-                          color: Colors.pinkAccent,
-                        )
-                      ]),
-                );
-              }).toList();
-            },
-          )
-        ],
-        backgroundColor: Colors.pinkAccent,
-      ),
-      body: ListView.builder(
-          itemCount: weatherData.list.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.pink[100],
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.network(
-                      'http://openweathermap.org/img/wn/${weatherData.list[index].weather[0].icon}@2x.png'),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '${weatherData.list[index].main.temp} °C',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.pinkAccent,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '${weatherData.list[index].weather[0].description}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.pinkAccent,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 70,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 5, 0),
-                    child: Text(
-                      '${weatherData.list[index].dtTxt.hour}:${weatherData.list[index].dtTxt.minute}0',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.pinkAccent,
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          }),
+                      SizedBox(
+                        width: 70,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 5, 0),
+                        child: Text(
+                          '${weatherData.list[index].dtTxt.hour}:${weatherData.list[index].dtTxt.minute}0',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: appTheme.mainColor,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }),
+        ),
+      ),
     );
   }
 }

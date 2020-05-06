@@ -4,6 +4,7 @@ import 'package:loginapp/theme.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
+Map data = {};
 
 class MyApp extends StatelessWidget {
   @override
@@ -14,17 +15,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class Login extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  bool isDark;
   bool switchOn = false;
 
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments;
+    isDark = data != null ? data['isDark'] : false;
+    print("log $isDark");
+
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => LoginModel()),
-        ChangeNotifierProvider(create: (context) => AppTheme()),
+        ChangeNotifierProvider(create: (context) => AppTheme(isDark)),
       ],
       child: Consumer<AppTheme>(
         builder: (_, appTheme, __) => Scaffold(
