@@ -16,7 +16,6 @@ class DailyWeatherTab extends StatelessWidget {
     for (int i = 0; i < dailyWeather.length; i++) {
       days.add(DateTime.now().add(Duration(days: i)));
     }
-    // TODO: implement build
     return ListView.builder(
         itemCount: dailyWeather.length,
         itemBuilder: (context, index) {

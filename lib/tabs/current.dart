@@ -10,8 +10,28 @@ class CurrentWeatherTab extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(child: Text('this is current weather'),);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+             Center(
+              child: Image.network('http://openweathermap.org/img/wn/${currentWeather.weather.icon}@2x.png', scale: 0.7,),
+            ),
+          Center(
+            child: Text('${currentWeather.temp}°C',
+            style: TextStyle(fontSize: 40, color: appTheme.mainColor),),
+          ),
+          SizedBox(height: 30),
+          Text(currentWeather.weather.main),
+          Text(currentWeather.weather.description),
+          Text('${currentWeather.humidity}%'),
+
+          Text('${currentWeather.feelsLike}°C'),
+          Text('${currentWeather.feelsLike}°C'),
+
+        ],
+      ),
+    );
   }
   String getWeekDay(int weekday) {
     switch (weekday) {
