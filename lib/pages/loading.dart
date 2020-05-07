@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:loginapp/weather.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Loading extends StatefulWidget {
   Map loginData = {};
@@ -21,20 +22,22 @@ class _LoadingState extends State<Loading> {
 
   void getWeather() async {
     try {
+
+
+      Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+print(position.longitude);
       Response response = await Dio().get(
-          'https://api.openweathermap.org/data/2.5/forecast?',
+          'https://api.openweathermap.org/data/2.5/onecall?',
           queryParameters: {
-            'q': 'Tehran',
+            'lat':position.longitude,
+            'lon': position.longitude,
             'units': 'metric',
             'appid': '121bfe664777c886e1481f7feb830455'
           });
+      print(response.toString());
 
-      Response response2 =
-          await Dio().post('https://postman-echo.com/post', data: 'num num');
-      print('kimiya $response2');
-      WeatherData weatherData = weatherListFromJson(response.toString());
+      WeatherData weatherData = weatherDataFromJson(response.toString());
       Navigator.pushReplacementNamed(context, '/home', arguments: {
-
         'email': widget.loginData['email'],
         'password': widget.loginData['password'],
         'isDark': widget.loginData['isDark'],
@@ -43,17 +46,19 @@ class _LoadingState extends State<Loading> {
     } catch (e) {
       print(e);
     }
-
   }
 
   Widget build(BuildContext context) {
     widget.loginData = ModalRoute.of(context).settings.arguments;
-    widget.background =  widget.loginData['isDark'] ? Colors.deepOrange[900] : Colors.white;
+    widget.background =
+        widget.loginData['isDark'] ? Colors.deepOrange[900] : Colors.white;
     return Scaffold(
       backgroundColor: widget.background,
       body: Center(
         child: SpinKitFadingCircle(
-          color: widget.loginData['isDark'] ? Colors.orange[300] : Colors.pinkAccent,
+          color: widget.loginData['isDark']
+              ? Colors.orange[300]
+              : Colors.pinkAccent,
           size: 50,
         ),
       ),

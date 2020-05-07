@@ -1,72 +1,104 @@
 // To parse this JSON data, do
 //
 //     final empty = emptyFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
-WeatherData weatherListFromJson(String str) =>
+WeatherData weatherDataFromJson(String str) =>
     WeatherData.fromJson(json.decode(str));
 
 class WeatherData {
-  List<ListElement> list;
+  double lat;
+  double lon;
+  String timezone;
+  Current current;
+  List<Current> hourly;
+  List<Daily> daily;
 
   WeatherData({
-    this.list,
+    this.lat,
+    this.lon,
+    this.timezone,
+    this.current,
+    this.hourly,
+    this.daily,
   });
-
 
   factory WeatherData.fromJson(Map<String, dynamic> json) => WeatherData(
-        list: List<ListElement>.from(
-            json["list"].map((x) => ListElement.fromJson(x))),
+        lat: json["lat"].toDouble(),
+        lon: json["lon"].toDouble(),
+        timezone: json["timezone"],
+        current: Current.fromJson(json["current"]),
+        hourly:
+            List<Current>.from(json["hourly"].map((x) => Current.fromJson(x))),
+        daily: List<Daily>.from(json["daily"].map((x) => Daily.fromJson(x))),
       );
 }
 
-class ListElement {
-  MainClass main;
-  List<Weather> weather;
-  DateTime dtTxt;
-
-  ListElement({
-    this.main,
-    this.weather,
-    this.dtTxt,
-  });
-
-  factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
-        main: MainClass.fromJson(json["main"]),
-        weather:
-            List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
-        dtTxt: DateTime.parse(json["dt_txt"]),
-      );
-}
-
-class MainClass {
+class Current {
+  int sunrise;
+  int sunset;
   double temp;
   double feelsLike;
-  double tempMin;
-  double tempMax;
+  int pressure;
   int humidity;
+  double dewPoint;
+  double uvi;
+  int clouds;
+  double windSpeed;
+  int windDeg;
+  Weather weather;
+  Rain rain;
 
-  MainClass({
+  Current({
+    this.sunrise,
+    this.sunset,
     this.temp,
     this.feelsLike,
-    this.tempMin,
-    this.tempMax,
+    this.pressure,
     this.humidity,
+    this.dewPoint,
+    this.uvi,
+    this.clouds,
+    this.windSpeed,
+    this.windDeg,
+    this.weather,
+    this.rain,
   });
 
-  factory MainClass.fromJson(Map<String, dynamic> json) => MainClass(
-        temp: json["temp"].toDouble(),
-        feelsLike: json["feels_like"].toDouble(),
-        tempMin: json["temp_min"].toDouble(),
-        tempMax: json["temp_max"].toDouble(),
-        humidity: json["humidity"],
+  factory Current.fromJson(Map<String, dynamic> json) {
+    return Current(
+      sunrise: json["sunrise"] == null ? null : json["sunrise"],
+      sunset: json["sunset"] == null ? null : json["sunset"],
+      temp: json["temp"].toDouble(),
+      feelsLike: json["feels_like"].toDouble(),
+      pressure: json["pressure"],
+      humidity: json["humidity"],
+      dewPoint: json["dew_point"].toDouble(),
+      uvi: json["uvi"] == null ? null : json["uvi"].toDouble(),
+      clouds: json["clouds"],
+      windSpeed: json["wind_speed"].toDouble(),
+      windDeg: json["wind_deg"],
+      weather: List<Weather>.from(
+          json["weather"].map((x) => Weather.fromJson(x)))[0],
+      rain: json["rain"] == null ? null : Rain.fromJson(json["rain"]),
+    );
+  }
+}
+
+class Rain {
+  double the1H;
+
+  Rain({
+    this.the1H,
+  });
+
+  factory Rain.fromJson(Map<String, dynamic> json) => Rain(
+        the1H: json["1h"].toDouble(),
       );
 }
 
 class Weather {
-  int id;
   String main;
   String description;
   String icon;
@@ -83,4 +115,106 @@ class Weather {
         icon: json["icon"],
       );
 }
+
+class Daily {
+  String weekday;
+  int sunrise;
+  int sunset;
+  Temp temp;
+  FeelsLike feelsLike;
+  int pressure;
+  int humidity;
+  double dewPoint;
+  double windSpeed;
+  int windDeg;
+  List<Weather> weather;
+  int clouds;
+  double uvi;
+  double rain;
+
+  Daily({
+    this.weekday,
+    this.sunrise,
+    this.sunset,
+    this.temp,
+    this.feelsLike,
+    this.pressure,
+    this.humidity,
+    this.dewPoint,
+    this.windSpeed,
+    this.windDeg,
+    this.weather,
+    this.clouds,
+    this.uvi,
+    this.rain,
+  });
+
+  factory Daily.fromJson(Map<String, dynamic> json) {
+    return Daily(
+      sunrise: json["sunrise"],
+      sunset: json["sunset"],
+      temp: Temp.fromJson(json["temp"]),
+      feelsLike: FeelsLike.fromJson(json["feels_like"]),
+      pressure: json["pressure"],
+      humidity: json["humidity"],
+      dewPoint: json["dew_point"].toDouble(),
+      windSpeed: json["wind_speed"].toDouble(),
+      windDeg: json["wind_deg"],
+      weather:
+          List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
+      clouds: json["clouds"],
+      uvi: json["uvi"].toDouble(),
+      rain: json["rain"] == null ? null : json["rain"].toDouble(),
+    );
+  }
+}
+
+class FeelsLike {
+  double day;
+  double night;
+  double eve;
+  double morn;
+
+  FeelsLike({
+    this.day,
+    this.night,
+    this.eve,
+    this.morn,
+  });
+
+  factory FeelsLike.fromJson(Map<String, dynamic> json) => FeelsLike(
+        day: json["day"].toDouble(),
+        night: json["night"].toDouble(),
+        eve: json["eve"].toDouble(),
+        morn: json["morn"].toDouble(),
+      );
+}
+
+class Temp {
+  double day;
+  double min;
+  double max;
+  double night;
+  double eve;
+  double morn;
+
+  Temp({
+    this.day,
+    this.min,
+    this.max,
+    this.night,
+    this.eve,
+    this.morn,
+  });
+
+  factory Temp.fromJson(Map<String, dynamic> json) => Temp(
+        day: json["day"].toDouble(),
+        min: json["min"].toDouble(),
+        max: json["max"].toDouble(),
+        night: json["night"].toDouble(),
+        eve: json["eve"].toDouble(),
+        morn: json["morn"].toDouble(),
+      );
+}
+
 
