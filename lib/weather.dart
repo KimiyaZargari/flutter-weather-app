@@ -117,7 +117,6 @@ class Weather {
 }
 
 class Daily {
-  String weekday;
   int sunrise;
   int sunset;
   Temp temp;
@@ -127,13 +126,12 @@ class Daily {
   double dewPoint;
   double windSpeed;
   int windDeg;
-  List<Weather> weather;
+  Weather weather;
   int clouds;
   double uvi;
   double rain;
 
   Daily({
-    this.weekday,
     this.sunrise,
     this.sunset,
     this.temp,
@@ -161,7 +159,7 @@ class Daily {
       windSpeed: json["wind_speed"].toDouble(),
       windDeg: json["wind_deg"],
       weather:
-          List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))),
+          List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x)))[0],
       clouds: json["clouds"],
       uvi: json["uvi"].toDouble(),
       rain: json["rain"] == null ? null : json["rain"].toDouble(),

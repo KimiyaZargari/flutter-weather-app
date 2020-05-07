@@ -3,24 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:loginapp/theme.dart';
 import 'package:loginapp/weather.dart';
 
-class HourlyWeather extends StatelessWidget{
+class DailyWeatherTab extends StatelessWidget{
   AppTheme appTheme;
-  WeatherData weatherData;
-  HourlyWeather({this.appTheme, this.weatherData});
+  List<Daily> dailyWeather;
+  DailyWeatherTab({this.appTheme, this.dailyWeather});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ListView.builder(
-        itemCount: weatherData.hourly.length,
+        itemCount: dailyWeather.length,
         itemBuilder: (context, index) {
-          Current current = weatherData.hourly[index];
-          List<DateTime> dateTimes = [];
-          for(int i = 0; i < weatherData.hourly.length; i ++){
-            dateTimes.add(DateTime.now().add(Duration(hours: i)));
-          }
-       
-
+          Daily day = dailyWeather[index];
           return Card(
             color: appTheme.cardColor,
             child: Row(
@@ -28,7 +22,7 @@ class HourlyWeather extends StatelessWidget{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Image.network(
-                    'http://openweathermap.org/img/wn/${current.weather.icon}@2x.png'),
+                    'http://openweathermap.org/img/wn/${day.weather.icon}@2x.png'),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   child: Column(
@@ -36,10 +30,10 @@ class HourlyWeather extends StatelessWidget{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${current.temp} °C',
+                        'min temp :${day.temp.min} °C',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 15,
                           color: appTheme.mainColor,
                         ),
                       ),
@@ -47,7 +41,18 @@ class HourlyWeather extends StatelessWidget{
                         height: 10,
                       ),
                       Text(
-                        '${current.weather.main}',
+                        'max temp :${day.temp.max} °C',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: appTheme.mainColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '${day.weather.main}',
                         style: TextStyle(
                           fontSize: 12,
                           color: appTheme.mainColor,
@@ -61,24 +66,11 @@ class HourlyWeather extends StatelessWidget{
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        '${dateTimes[index].hour}:00',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: appTheme.mainColor,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-
-                      Text(getWeekDay(dateTimes[index].weekday),
+                  child: Text('hi',
                         style: TextStyle(
                           fontSize: 12,
                           color: appTheme.mainColor,
                         ),),
-                    ],
-                  ),
                 )
               ],
             ),

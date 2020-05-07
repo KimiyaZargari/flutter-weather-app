@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loginapp/pages/fiveDayWeatherTab.dart';
+import 'package:loginapp/tabs/current.dart';
+import 'package:loginapp/tabs/daily.dart';
+import 'package:loginapp/tabs/hourly.dart';
 import 'package:loginapp/theme.dart';
 import 'package:loginapp/weather.dart';
 import 'package:provider/provider.dart';
@@ -17,19 +19,17 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-    List<WeatherData> weatherData = [data['weather']];
+    WeatherData weatherData = data['weather'];
     bool isDark = data['isDark'];
     print('log home $isDark');
-    List<Tab> tabs = weatherData.map((weather){
-      return Tab(text : 'hi');
-    }).toList();
+    List<Tab> tabs = [Tab(text: 'current'),Tab(text: 'daily',), Tab(text:'hourly')];
 
 
     return ChangeNotifierProvider<AppTheme>(
       create: (context) => AppTheme(isDark),
       child: Consumer<AppTheme>(
         builder: (_, appTheme, __) => DefaultTabController(
-          length: 1,
+          length: 3,
           child: Scaffold(
             backgroundColor: appTheme.backgroundColor,
             appBar: AppBar(
@@ -93,9 +93,7 @@ class _HomeState extends State<Home> {
               backgroundColor: appTheme.appBarColor,
             ),
             body: TabBarView(
-              children: weatherData.map((weather){
-                return HourlyWeather(appTheme: appTheme, weatherData: weather,);
-              }).toList(),
+              children: [CurrentWeatherTab(appTheme: appTheme, currentWeather: weatherData.current), DailyWeatherTab(appTheme: appTheme, dailyWeather: weatherData.daily), HourlyWeatherTab(appTheme: appTheme, hourlyWeather: weatherData.hourly,)],
             )
           ),
         ),
