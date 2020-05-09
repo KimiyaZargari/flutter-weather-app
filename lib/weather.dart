@@ -38,8 +38,8 @@ class WeatherData {
 class Current {
   int sunrise;
   int sunset;
-  double temp;
-  double feelsLike;
+  int temp;
+  int feelsLike;
   int pressure;
   int humidity;
   double dewPoint;
@@ -67,11 +67,12 @@ class Current {
   });
 
   factory Current.fromJson(Map<String, dynamic> json) {
+    print('here');
     return Current(
       sunrise: json["sunrise"] == null ? null : json["sunrise"],
       sunset: json["sunset"] == null ? null : json["sunset"],
-      temp: json["temp"].toDouble(),
-      feelsLike: json["feels_like"].toDouble(),
+      temp: json["temp"].toInt(),
+      feelsLike: json["feels_like"].toInt(),
       pressure: json["pressure"],
       humidity: json["humidity"],
       dewPoint: json["dew_point"].toDouble(),
@@ -158,8 +159,8 @@ class Daily {
       dewPoint: json["dew_point"].toDouble(),
       windSpeed: json["wind_speed"].toDouble(),
       windDeg: json["wind_deg"],
-      weather:
-          List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x)))[0],
+      weather: List<Weather>.from(
+          json["weather"].map((x) => Weather.fromJson(x)))[0],
       clouds: json["clouds"],
       uvi: json["uvi"].toDouble(),
       rain: json["rain"] == null ? null : json["rain"].toDouble(),
@@ -168,51 +169,45 @@ class Daily {
 }
 
 class FeelsLike {
-  double day;
-  double night;
-  double eve;
-  double morn;
+  int day;
+  int night;
+  int morn;
 
   FeelsLike({
     this.day,
     this.night,
-    this.eve,
     this.morn,
   });
 
   factory FeelsLike.fromJson(Map<String, dynamic> json) => FeelsLike(
-        day: json["day"].toDouble(),
-        night: json["night"].toDouble(),
-        eve: json["eve"].toDouble(),
-        morn: json["morn"].toDouble(),
+        day: json["day"].toInt(),
+        night: json["night"].toInt(),
+        morn: json["morn"].toInt(),
       );
 }
 
 class Temp {
-  double day;
-  double min;
-  double max;
-  double night;
-  double eve;
-  double morn;
+  int day;
+  int min;
+  int max;
+  int night;
+  int morn;
 
   Temp({
     this.day,
     this.min,
     this.max,
     this.night,
-    this.eve,
     this.morn,
   });
 
   factory Temp.fromJson(Map<String, dynamic> json) => Temp(
-        day: json["day"].toDouble(),
-        min: json["min"].toDouble(),
-        max: json["max"].toDouble(),
-        night: json["night"].toDouble(),
-        eve: json["eve"].toDouble(),
-        morn: json["morn"].toDouble(),
+        min: json["min"].toInt(),
+        max: json["max"].toInt(),
+        day: json["day"].toInt(),
+        night: json["night"].toInt(),
+        morn: json["morn"].toInt(),
       );
+
+
 }
-
-
