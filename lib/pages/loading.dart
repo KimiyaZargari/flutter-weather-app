@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 class Loading extends StatefulWidget {
   Map loginData = {};
   Color background;
+  bool isDark;
 
   @override
   _LoadingState createState() => _LoadingState();
@@ -23,7 +24,6 @@ class _LoadingState extends State<Loading> {
   void getWeather() async {
     try {
 
-
       Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
 print(position.longitude);
       Response response = await Dio().get(
@@ -35,7 +35,6 @@ print(position.longitude);
             'appid': '121bfe664777c886e1481f7feb830455'
           });
       print(response.toString());
-
       WeatherData weatherData = weatherDataFromJson(response.toString());
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'email': widget.loginData['email'],
@@ -44,14 +43,14 @@ print(position.longitude);
         'weather': weatherData,
       });
     } catch (e) {
-      print(e);
+      Navigator.pushReplacementNamed(context, '/', arguments: {'isDark': widget.isDark });
     }
   }
 
   Widget build(BuildContext context) {
     widget.loginData = ModalRoute.of(context).settings.arguments;
-    widget.background =
-        widget.loginData['isDark'] ? Colors.deepOrange[900] : Colors.white;
+    widget.isDark = widget.loginData['isDark'];
+    widget.background = widget.isDark ? Colors.deepOrange[900] : Colors.white;
     return Scaffold(
       backgroundColor: widget.background,
       body: Center(
