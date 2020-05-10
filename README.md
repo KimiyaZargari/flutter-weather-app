@@ -1,4 +1,4 @@
-# loginapp
+# flutter weather app
 
 A new Flutter application.
 
