@@ -28,98 +28,110 @@ class DailyWeatherTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        getWeekDay(days[index].weekday),
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: appTheme.mainColor,
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 5),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                             Text(
+                                getWeekDay(days[index].weekday),
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: appTheme.mainColor,
+                                ),
+                            ),
+                            Image.network(
+                                'http://openweathermap.org/img/wn/${day.weather.icon}@2x.png',
+                            scale: 0.9),
+                          ],
                         ),
                       ),
-                      Image.network(
-                          'http://openweathermap.org/img/wn/${day.weather.icon}@2x.png'),
-                    ],
+                    ),
                   ),
-                  SizedBox(width: 60,),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Tempreture:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: appTheme.mainColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
-                          child: Text(
-                            'min: ${day.temp.min} °C',
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Tempreture:',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                               color: appTheme.mainColor,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
-                          child: Text(
-                            'max: ${day.temp.max} °C',
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 5, 0, 0),
+                            child: Text(
+                              'min: ${day.temp.min} °C',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appTheme.mainColor,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 5, 0, 0),
+                            child: Text(
+                              'max: ${day.temp.max} °C',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appTheme.mainColor,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Description:',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                               color: appTheme.mainColor,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Description:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: appTheme.mainColor,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 5, 0, 0),
+                            child: Text(
+                              '${day.weather.main}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appTheme.mainColor,
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
-                          child: Text(
-                            '${day.weather.main}',
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Humidity:',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                               color: appTheme.mainColor,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Humidity:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: appTheme.mainColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                          child: Text(
-                            '${day.humidity}%',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: appTheme.mainColor,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 5, 0, 5),
+                            child: Text(
+                              '${day.humidity}%',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appTheme.mainColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
