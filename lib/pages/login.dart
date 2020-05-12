@@ -44,13 +44,8 @@ class Login extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        250,
-                        0,
-                        0,
-                        0,
-                      ),
+                    Align(
+                     alignment: Alignment.centerRight,
                       child: Switch(
                           value: appTheme.isDark,
                           activeColor: Colors.deepOrange,
@@ -220,25 +215,31 @@ class Login extends StatelessWidget {
                     ),
                     Row(
                       children: <Widget>[
-                        Checkbox(
-                          value: false,
-                          onChanged: (bool value) {},
-                        ),
-                        Text(
-                          'Remember me?',
-                          style: TextStyle(
-                            color: appTheme.greyText,
-                            fontSize: 12,
+                        Expanded(
+                          flex: 1,
+                          child: Checkbox(
+                            value: false,
+                            onChanged: (bool value) {},
                           ),
                         ),
-                        SizedBox(
-                          width: 70,
+                        Expanded(
+                          flex: 5,
+                          child: Text(
+                            'Remember me?',
+                            style: TextStyle(
+                              color: appTheme.greyText,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
-                        Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color: appTheme.mainColor,
-                            fontSize: 12,
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: appTheme.mainColor,
+                              fontSize: 12,
+                            ),
                           ),
                         )
                       ],
