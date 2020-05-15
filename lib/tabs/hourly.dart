@@ -29,7 +29,7 @@ class HourlyWeatherTab extends StatelessWidget{
                 Image.network(
                     'http://openweathermap.org/img/wn/${current.weather.icon}@2x.png'),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

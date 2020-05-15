@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loginapp/loginModel.dart';
+import 'package:loginapp/loginPage/controller.dart';
 import 'package:loginapp/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -18,20 +18,20 @@ class MyApp extends StatelessWidget {
 
 class Login extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isDark;
-  bool switchOn = false;
+
 
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-    isDark = data != null ? data['isDark'] : false;
-    print("log $isDark");
+    bool _isDark = data != null ? data['isDark'] : false;
+    LoginPageController controller = LoginPageController(_isDark);
+
 
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => LoginModel()),
-        ChangeNotifierProvider(create: (context) => AppTheme(isDark)),
+        ChangeNotifierProvider(create: (context) => controller),
+        ChangeNotifierProvider(create: (context) => AppTheme(controller.loginPageModel.isDark)),
       ],
       child: Consumer<AppTheme>(
         builder: (_, appTheme, __) => Scaffold(
@@ -87,7 +87,7 @@ class Login extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    Consumer<LoginModel>(
+                    Consumer<LoginPageController>(
                       builder: (context, loginInfo, child) => Form(
                           autovalidate: loginInfo.autoValidate,
                           key: _formKey,
@@ -127,7 +127,7 @@ class Login extends StatelessWidget {
                                           EdgeInsets.fromLTRB(30.0, 0, 0, 3),
                                       child: TextFormField(
                                         keyboardType: TextInputType.emailAddress,
-                                        validator: validateEmail,
+                                        validator: controller.validateEmail(),
                                         onSaved: (String val) {
                                           loginInfo.email = val;
                                         },
@@ -183,7 +183,7 @@ class Login extends StatelessWidget {
                                               30.0, 0, 3, 0),
                                           child: TextFormField(
                                             obscureText: loginInfo.hidePassword,
-                                            validator: validatePassword,
+                                            validator: controller.validatePassword(),
                                             onSaved: (String val) {
                                               loginInfo.password = val;
                                             },
@@ -247,7 +247,7 @@ class Login extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Consumer<LoginModel>(
+                    Consumer<LoginPageController>(
                       builder: (context, loginInfo, child) => RaisedButton(
                         child: Text(
                           'Sign in',
@@ -257,12 +257,8 @@ class Login extends StatelessWidget {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _formKey.currentState.save();
-                            Navigator.pushReplacementNamed(context, '/loading',
-                                arguments: {
-                                  'email': loginInfo.email,
-                                  'password': loginInfo.password,
-                                  'isDark': appTheme.isDark
-                                });
+                            controller.navigateToLoading(context, loginInfo.email,  loginInfo.password);
+
                           } else {
                             loginInfo.autoValidate = true;
                           }
@@ -326,16 +322,4 @@ class Login extends StatelessWidget {
     );
   }
 
-  String validatePassword(String value) {
-    if (value.length <= 6) return 'Password must be at least 7 characters';
-    return null;
-  }
-
-  String validateEmail(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value)) return 'Enter Valid Email';
-    return null;
-  }
 }
